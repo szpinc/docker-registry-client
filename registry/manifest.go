@@ -2,7 +2,7 @@ package registry
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/docker/distribution"
@@ -20,14 +20,14 @@ func (registry *Registry) Manifest(repository, reference string) (*schema1.Signe
 		return nil, err
 	}
 
-	req.Header.Set("Accept", schema1.MediaTypeManifest)
+	req.Header.Set("Accept", schema1.MediaTypeManifest+","+"application/vnd.oci.image.manifest.v1+json")
 	resp, err := registry.Client.Do(req)
 	if err != nil {
 		return nil, err
 	}
 
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
@@ -50,14 +50,14 @@ func (registry *Registry) ManifestV2(repository, reference string) (*schema2.Des
 		return nil, err
 	}
 
-	req.Header.Set("Accept", schema2.MediaTypeManifest)
+	req.Header.Set("Accept", schema2.MediaTypeManifest+","+"application/vnd.oci.image.manifest.v1+json")
 	resp, err := registry.Client.Do(req)
 	if err != nil {
 		return nil, err
 	}
 
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}

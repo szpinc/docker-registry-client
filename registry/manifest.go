@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"io"
 	"net/http"
+	"strings"
 
 	"github.com/docker/distribution"
 	"github.com/docker/distribution/manifest/schema1"
@@ -20,10 +21,13 @@ func (registry *Registry) Manifest(repository, reference string) (*schema1.Signe
 		return nil, err
 	}
 
-	req.Header.Set("Accept", schema1.MediaTypeManifest)
-	req.Header.Set("Accept", "application/vnd.docker.distribution.manifest.list.v2+json")
-	req.Header.Set("Accept", "application/vnd.oci.image.index.v1+json")
-	req.Header.Set("Accept", "application/vnd.oci.image.manifest.v1+json")
+	accept := strings.Join([]string{
+		schema2.MediaTypeManifest,
+		"application/vnd.docker.distribution.manifest.list.v2+json",
+		"application/vnd.oci.image.index.v1+json",
+		"application/vnd.oci.image.manifest.v1+json",
+	}, ",")
+	req.Header.Set("Accept", accept)
 	resp, err := registry.Client.Do(req)
 	if err != nil {
 		return nil, err
@@ -53,10 +57,13 @@ func (registry *Registry) ManifestV2(repository, reference string) (*schema2.Des
 		return nil, err
 	}
 
-	req.Header.Set("Accept", schema2.MediaTypeManifest)
-	req.Header.Set("Accept", "application/vnd.docker.distribution.manifest.list.v2+json")
-	req.Header.Set("Accept", "application/vnd.oci.image.index.v1+json")
-	req.Header.Set("Accept", "application/vnd.oci.image.manifest.v1+json")
+	accept := strings.Join([]string{
+		schema2.MediaTypeManifest,
+		"application/vnd.docker.distribution.manifest.list.v2+json",
+		"application/vnd.oci.image.index.v1+json",
+		"application/vnd.oci.image.manifest.v1+json",
+	}, ",")
+	req.Header.Set("Accept", accept)
 	resp, err := registry.Client.Do(req)
 	if err != nil {
 		return nil, err

@@ -20,7 +20,10 @@ func (registry *Registry) Manifest(repository, reference string) (*schema1.Signe
 		return nil, err
 	}
 
-	req.Header.Set("Accept", schema1.MediaTypeManifest+","+"application/vnd.oci.image.manifest.v1+json")
+	req.Header.Set("Accept", schema1.MediaTypeManifest)
+	req.Header.Set("Accept", "application/vnd.docker.distribution.manifest.list.v2+json")
+	req.Header.Set("Accept", "application/vnd.oci.image.index.v1+json")
+	req.Header.Set("Accept", "application/vnd.oci.image.manifest.v1+json")
 	resp, err := registry.Client.Do(req)
 	if err != nil {
 		return nil, err
